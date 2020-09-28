@@ -8,6 +8,7 @@
 import Combine
 
 class GameInteractor {
+    private let model: MatrixDataModel
     private let matrix: Matrix
     private let matrixSize: MatrixSize
     private let commands: Commands
@@ -17,13 +18,15 @@ class GameInteractor {
 
     weak var delegate: GameInteractorProtocol?
 
-    #warning("Consider changing")
+    #warning("Add documentation to what this does.")
     var pointer: Pointer { matrix.pointer }
     var pointerPublisher: Published<Pointer>.Publisher { matrix.$pointer }
-    @Published var occupiedCell: MatrixCell = MatrixCell()
-    @Published var matrixGrid: [[MatrixCell]] = [[]]
 
-    let model: MatrixDataModel
+    var occupiedCell: MatrixCell { model.occupiedCell }
+    var occupiedCellPublisher: Published<MatrixCell>.Publisher { model.$occupiedCell }
+
+    #warning("Add documentation to why these are @Published")
+    @Published var matrixGrid: [[MatrixCell]] = [[]]
     
     init(model: MatrixDataModel) {
         self.model = model
@@ -31,15 +34,6 @@ class GameInteractor {
         self.matrixSize = model.matrix.matrixSize
         self.commands = model.matrix.commands
         self.direction = model.matrix.direction
-
-        model.$occupiedCell
-          .assign(to: \.occupiedCell, on: self)
-          .store(in: &cancellables)
-    }
-
-    #warning("Add documentation")
-    func setNewPosition(_ pointer: Pointer) {
-        matrix.pointer = pointer
     }
 
     #warning("Rewrite into several functions when you adapt it for SwiftUI")
@@ -136,7 +130,7 @@ private extension GameInteractor {
     func executeCommands(commands: Commands) {
         for command in commands.commands {
             guard let commandToExecute = GameCommands(rawValue: command) else {
-                delegate?.gameDidFinish(endPosition: self.pointer, success: false)
+                delegate?.gameDidFinish(endPosition: pointer, success: false)
                 return
             }
             executeCommand(command: commandToExecute)
@@ -188,6 +182,9 @@ private extension GameInteractor {
         }
     }
 
+    /// Calls bar with "Hello, world"
+    /// - parameter bar: A closure to call
+    /// - parameter theString: A string to use
     func isValidPosition(occupiedCell: MatrixCell) -> Bool {
 
         #warning("Add documentation for what is occuring")

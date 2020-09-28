@@ -9,11 +9,9 @@ import SwiftUI
 import Combine
 
 class GamePresenter: ObservableObject {
-    @Published var matrix: Matrix = Matrix()
     @Published var pointer: Pointer = Pointer()
-
-    #warning("Add documentation for why it's binding.")
-    let setPointer: Binding<Pointer>
+    @Published var occupiedCell: MatrixCell = MatrixCell()
+    @Published var matrixGrid: [[MatrixCell]] = [[]]
 
     weak var delegate: GamePresenterProtocol?
 
@@ -22,22 +20,16 @@ class GamePresenter: ObservableObject {
 
     init(interactor: GameInteractor) {
         self.interactor = interactor
-
-        #warning("Add documentation for what it does")
-        setPointer = Binding<Pointer>(
-            get: { interactor.pointer },
-            set: { interactor.setNewPosition($0) }
-        )
-
         self.interactor.delegate = self
-
-        interactor.model.$matrix
-            .assign(to: \.matrix, on: self)
-            .store(in: &cancellables)
 
         interactor.pointerPublisher
           .assign(to: \.pointer, on: self)
           .store(in: &cancellables)
+
+        interactor.occupiedCellPublisher
+            .assign(to: \.occupiedCell, on: self)
+            .store(in: &cancellables)
+
     }
 
     func makeGameView() {
@@ -53,6 +45,6 @@ extension GamePresenter: GameInteractorProtocol {
 
 
     func gameDidFinish(endPosition: Pointer, success: Bool) {
-        success ? delegate?.showGameResult(gameResult: Constants.statusCodes.successMessage(endPositionX: matrix.pointer.positionX, endPositionY: matrix.pointer.positionY)) : delegate?.showGameResult(gameResult: Constants.statusCodes.errorMessage)
+        success ? delegate?.showGameResult(gameResult: Constants.statusCodes.successMessage(endPositionX: pointer.positionX, endPositionY: pointer.positionY)) : delegate?.showGameResult(gameResult: Constants.statusCodes.errorMessage)
     }
 }

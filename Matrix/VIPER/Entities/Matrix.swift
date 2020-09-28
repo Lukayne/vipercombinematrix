@@ -62,5 +62,4 @@ extension Matrix: Equatable {
     }
 }
 
-extension Matrix: Identifiable {}
 extension Matrix: ObservableObject {}

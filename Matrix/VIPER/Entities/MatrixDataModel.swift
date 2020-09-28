@@ -9,8 +9,8 @@ import Combine
 
 final class MatrixDataModel {
     @Published var matrix = Matrix()
-    #warning("Do this in the interactor instead.")
     @Published var occupiedCell = MatrixCell()
+    @Published var matrixGrid: [[MatrixCell]] = [[]]
 
     private var cancellables = Set<AnyCancellable>()
 }

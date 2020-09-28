@@ -9,6 +9,8 @@ import Foundation
 
 class InputValidator {
 
+    // MARK: Validators
+
     func validateStartingInput(startingInputData: String?, completion: (_ startingInputAsArray: [Int]?, _ correctInput: Bool) -> ()) {
         guard let startingValues = startingInputData else {
             completion(nil, false)
@@ -74,6 +76,9 @@ class InputValidator {
 
 private extension InputValidator {
 
+    // MARK: Helpers
+
+    
     #warning("Add documentation that explains that this can actually take 01 as a valid input or 1929100111000")
     func convertStringIntoArrayOfInts(stringToConvert: String) -> [Int]? {
         return stringToConvert.compactMap { $0.wholeNumberValue }

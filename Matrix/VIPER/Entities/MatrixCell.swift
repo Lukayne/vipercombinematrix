@@ -46,5 +46,4 @@ extension MatrixCell: Equatable {
     }
 }
 
-extension MatrixCell: Identifiable {}
 extension MatrixCell: ObservableObject {}

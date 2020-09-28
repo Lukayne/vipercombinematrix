@@ -1,0 +1,16 @@
+{
+  "commands": [
+    1,
+    2,
+    3
+  ],
+  "matrixSize": {
+    "width": 4,
+    "height": 4
+  },
+  "pointer": {
+    "startingPosX": 4,
+    "startingPosY": 4
+  },
+  "direction": 0
+}
